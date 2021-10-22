@@ -42,6 +42,8 @@ check `main.R` for more info
 
 the result list generated: `result/rankinglist.csv`
 
-## ELO
-check `ELO.Rmd` for more info
+## Prediction and Roles' Impact
+check `result/prediction.xlsx` for more info
 
+## ELO Rating System
+check `ELO.Rmd` for more info
