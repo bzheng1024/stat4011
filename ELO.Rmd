@@ -1,0 +1,224 @@
+---
+title: "STAT4011_Project1"
+author: "WU,Haoyu"
+date: "10/12/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Read data and create id list.
+players<-read.csv('./data/list_player.csv',header=TRUE)
+
+# Add a new row
+newrow<-data.frame("NOB","ALL","_NOOB_","NOOB")
+names(newrow)<-names(players)
+players<-rbind(players, newrow)
+
+id<-unique(players[3])
+gameplayer<-read.csv('./data/games_player.csv',header=TRUE)
+game<-gameplayer[order(gameplayer[,1]),]
+game<-as.matrix(game)
+colnames(game)=NULL
+idlist<-id$player
+```
+
+```{r}
+#Generating original score list
+
+score<-data.frame(id=idlist,latent=rep(1000,84))
+```
+
+
+```{r}
+#This function receive a single rank record and return the name of the winning side.
+
+win<-function(match){
+  winside<-match[2:6]
+  winner<-unique(winside)
+  return(winside)
+}
+
+#This function receive a single rank record and return the name of the losing side.
+
+lose<-function(match){
+  loseside<-match[7:11]
+  loser<-unique(loseside)
+  return(loseside)
+}
+```
+
+```{r}
+#This score receive the name of five players and return their score value.
+
+getscore<-function(x){
+  score1<-score[id==x[1],2]
+  score2<-score[id==x[2],2]
+  score3<-score[id==x[3],2] 
+  score4<-score[id==x[4],2]
+  score5<-score[id==x[5],2]
+  scorelist<-c(score1,score2,score3,score4,score5)
+  return(scorelist)
+}
+
+getscore(lose(game[1,]))
+```
+```{r}
+#This function receive the score of both side, and compute the expecting win rate.
+
+P<-function(x,y){
+  xbar<-sum(x)/sqrt(length(x))
+  ybar<-sum(y)/sqrt(length(y))
+  d<-xbar-ybar
+  prob<-1/(1+10^(-d/400))
+  return(prob)
+}
+```
+
+```{r}
+#This function receive the team score and return the corresponding K value.
+
+K<-function(x){
+  if (x>2400)
+    k<-10
+  else if (x<2300)
+    k<-30
+  else k<-490-x/5
+  return(k)
+}
+```
+
+```{r}
+#This function receive a single rank records and do the add/minus work to each player's score.
+#The computation follow the basic logic mentioned before, and return the new score list.
+
+change<-function(match){
+  win<-win(match)
+  lose<-lose(match)
+  winscore<-getscore(win)
+  losescore<-getscore(lose)
+  winrate<-P(winscore,losescore)
+  winchange<-K(sum(winscore)/sqrt(5))*(1-winrate)
+  losechange<-K(sum(losescore)/sqrt(5))*(winrate-1)
+  winner<-unique(win)
+  loser<-unique(lose)
+  for (i in 1:length(winner)){
+    score[id==winner[i],2]<-score[id==winner[i],2]+winchange
+  }
+  for (j in 1:length(loser)){
+    score[id==loser[j],2]<-score[id==loser[j],2]+losechange
+  }
+  return(score)
+}
+```
+
+```{r}
+#Going through all rank records to get the score list.
+
+for (i in 1:dim(game)[1]){
+  score<-change(game[i,])
+}
+score[order(score[,2]),]
+```
+
+```{r}
+#Sum up individual score into team score.
+
+lOO<-sum(score[id=='Abbedagge',2],score[id=='FBI',2],score[id=='Ssumday',2],score[id=='Huhi',2],score[id=='Closer',2])/sqrt(5)
+
+C9<-sum(score[id=='Blaber',2],score[id=='Vulcan',2],score[id=='Zven',2],score[id=='Fudge',2],score[id=='Perkz',2])/sqrt(5)
+
+DFM<-sum(score[id=='Gaeng',2],score[id=='Steal',2],score[id=='Yutapon',2],score[id=='Evi',2],score[id=='Aria',2])/sqrt(5)
+
+DK<-sum(score[id=='ShowMaker',2],score[id=='Canyon',2],score[id=='Khan',2],score[id=='Ghost',2],score[id=='BeryL',2])/sqrt(5)
+
+EDG<-sum(score[id=='Viper',2],score[id=='Jiejie',2],score[id=='Meiko',2],score[id=='Flandre',2],score[id=='Scout',2])/sqrt(5)
+
+FNC<-sum(score[id=='Bwipo',2],score[id=='Nisqy',2],score[id=='Adam',2],score[id=='Hylissang',2],score[id=='Upset',2])/sqrt(5)
+
+FPX<-sum(score[id=='Tian',2],score[id=='Crisp',2],score[id=='Doinb',2],score[id=='Lwx',2],score[id=='Nuguri',2])/sqrt(5)
+
+GEN<-sum(score[id=='Rascal',2],score[id=='Clid',2],score[id=='Ruler',2],score[id=='Bdd',2],score[id=='Life',2])/sqrt(5)
+
+HLE<-sum(score[id=='Vsta',2],score[id=='Deft',2],score[id=='Morgan',2],score[id=='Willer',2],score[id=='Chovy',2])/sqrt(5)
+
+LNG<-sum(score[id=='Iwandy',2],score[id=='Tarzan',2],score[id=='Ale',2],score[id=='icon',2],score[id=='Light',2])/sqrt(5)
+
+MAD<-sum(score[id=='Armut',2],score[id=='Kaiser',2],score[id=='Elyoya',2],score[id=='Humanoid',2],score[id=='Carzzy',2])/sqrt(5)
+
+PSG<-sum(score[id=='River',2],score[id=='Unified',2],score[id=='Hanabi',2],score[id=='Maple',2],score[id=='Kaiwing',2])/sqrt(5)
+
+RGE<-sum(score[id=='Hans-sama',2],score[id=='Larssen',2],score[id=='Trymbi',2],score[id=='Odoamne',2],score[id=='Inspired',2])/sqrt(5)
+
+RNG<-sum(score[id=='Wei',2],score[id=='Xiaohu',2],score[id=='GALA',2],score[id=='Ming',2],score[id=='Cryin',2])/sqrt(5)
+
+T1<-sum(score[id=='Oner',2],score[id=='Canna',2],score[id=='Gumayusi',2],score[id=='Faker',2],score[id=='Keria',2])/sqrt(5)
+
+TL<-sum(score[id=='Tactical',2],score[id=='CoreJJ',2],score[id=='Alphari',2],score[id=='Santorin',2],score[id=='Jensen',2])/sqrt(5)
+```
+
+```{r}
+#Generating team score list.
+
+teamscore<-data.frame(team=c('RNG','EDG','FPX','LNG','DK','T1','GEN','HLE','MAD','FNC','RGE','DFM','C9','TL','lOO','PSG'),score=c(RNG,EDG,FPX,LNG,DK,T1,GEN,HLE,MAD,FNC,RGE,DFM,C9,TL,lOO,PSG))
+teamscore
+```
+
+```{r}
+#Sorted team score list.
+
+teamscore[order(teamscore[,2]),] 
+```
+
+```{r}
+teamscore[c(3,5,11,13),] #Generating group A prediction.
+```
+
+```{r}
+teamscore[c(6,2,12,15),] #Generating group B prediction.
+```
+
+```{r}
+teamscore[c(1,16,8,10),] #Generating group C prediction.
+```
+
+```{r}
+teamscore[c(7,4,9,14),] #Generating group D prediction.
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

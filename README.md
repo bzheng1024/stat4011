@@ -19,15 +19,13 @@ stat4011 course project 1
     + `games_player.csv` including all the games of players
     + `records_player.csv` including the win/lose records of players pair
 
-2. use `excel/noob.xlsx` to generate: 
+2. use PivotTable in `games_player.csv` to generate: 
 
-    + `records_noob.csv` including the win/lose records of player-noob pair
+    + `records_noob.xlsx` including the win/lose records of player-noob pair
 
-    *(please check `noob.xlsx` file for more info)*
+3. append `records_player.csv` and `records_noob.xlsx` together to generate:
 
-3. append `records_player.csv` and `records_noob.csv` together to generate:
-
-    + `BT_ranking` including all the win/lose records for our analysis
+    + `BT_ranking.xlsx` including all the win/lose records for our analysis
 
 
 ## Champions Data
@@ -40,4 +38,10 @@ run `python crawler/champions.py` under this dir to generate:
 
 
 ## Analysis
-check `main.r` for more info
+check `main.R` for more info
+
+the result list generated: `result/rankinglist.csv`
+
+## ELO
+check `ELO.Rmd` for more info
+
