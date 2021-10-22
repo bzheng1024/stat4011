@@ -31,7 +31,7 @@ stat4011 course project 1
 
 
 ## Champions Data
-**NOTE: we could not include the analysis of champions data in this report coz the page limits, but we have crawled the corresponding data, which could be used for further study.**
+**NOTE: we did not include the analysis of champions data in this report coz the page limits, but we have crawled the corresponding data, which could be used for further study.**
 
 run `python crawler/champions.py` under this dir to generate:
 
