@@ -3,6 +3,8 @@ stat4011 course project 1
 
 
 ## Data Source
+**NOTE: The website is updated with time, so it's possible that we get different data at different time.**
+
 [Tracking the Pro](https://www.trackingthepros.com/bootcamp)
 
 [OPGG](https://euw.op.gg)
@@ -13,6 +15,7 @@ stat4011 course project 1
 
 
 ## Players Data
+
 1. run `python crawler/players.py` under this dir to generate:
 
     + `list_player.csv` including the players info
